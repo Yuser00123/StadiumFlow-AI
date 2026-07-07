@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", var(--font-sans);
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-worldcup-gold: #e2b047;
+  --color-worldcup-green: #007c41;
+  --color-worldcup-red: #da291c;
+  --color-worldcup-blue: #002f6c;
+}
+
+/* Accessibility settings support */
+.text-size-lg {
+  font-size: 1.125rem; /* base is usually 1rem */
+}
+.text-size-lg h1 {
+  font-size: 2.5rem;
+}
+.text-size-lg h2 {
+  font-size: 2rem;
+}
+.text-size-lg h3 {
+  font-size: 1.5rem;
+}
+.text-size-lg p, .text-size-lg li, .text-size-lg span, .text-size-lg button, .text-size-lg input, .text-size-lg textarea {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.high-contrast {
+  --color-gray-900: #000000;
+  --color-gray-800: #050505;
+  --color-gray-700: #101010;
+  --color-gray-600: #1a1a1a;
+  --color-gray-500: #333333;
+  --color-gray-400: #555555;
+  --color-gray-300: #888888;
+  --color-gray-200: #cccccc;
+  --color-gray-100: #f0f0f0;
+  --color-gray-50: #ffffff;
+}
+
+/* Base custom classes */
+body {
+  font-family: var(--font-sans);
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+/* Markdown styling inside assistant response */
+.markdown-body {
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+.markdown-body h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: #1e293b;
+}
+.markdown-body h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 0.8rem;
+  margin-bottom: 0.4rem;
+  color: #334155;
+}
+.markdown-body h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 0.6rem;
+  margin-bottom: 0.3rem;
+  color: #475569;
+}
+.markdown-body p {
+  margin-bottom: 0.75rem;
+}
+.markdown-body ul, .markdown-body ol {
+  margin-left: 1.5rem;
+  margin-bottom: 0.75rem;
+  list-style-type: decimal;
+}
+.markdown-body ul {
+  list-style-type: disc;
+}
+.markdown-body li {
+  margin-bottom: 0.25rem;
+}
+.markdown-body code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background-color: #f1f5f9;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+}
+.markdown-body pre {
+  background-color: #0f172a;
+  color: #f8fafc;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+.markdown-body pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+}

@@ -1,0 +1,6 @@
+{
+  "name": "FIFA 2026 ArenaOps & Fan Guide",
+  "description": "An AI-powered tournament platform for FIFA World Cup 2026 stadiums. It integrates real-time Operations Control for organizers and volunteers with smart multilingual guides, transportation logistics, and accessibility routing for fans.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
