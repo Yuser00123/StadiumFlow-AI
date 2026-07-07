@@ -10,6 +10,15 @@
   --color-worldcup-green: #007c41;
   --color-worldcup-red: #da291c;
   --color-worldcup-blue: #002f6c;
+
+  @keyframes marquee {
+    0% {
+      transform: translate3d(100%, 0, 0);
+    }
+    100% {
+      transform: translate3d(-100%, 0, 0);
+    }
+  }
 }
 
 /* Accessibility settings support */

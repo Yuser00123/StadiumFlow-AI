@@ -78,18 +78,20 @@ export default function App() {
       } ${textSize === "lg" ? "text-size-lg" : ""}`}
     >
       {/* Dynamic Scoreboard ticker */}
-      <div className="bg-slate-900 text-white py-1 px-4 text-[10px] sm:text-xs font-mono font-bold flex items-center justify-between overflow-hidden whitespace-nowrap">
-        <div className="flex items-center space-x-2">
+      <div className="bg-slate-900 text-white py-1.5 px-4 text-[10px] sm:text-xs font-mono font-bold flex items-center justify-between overflow-hidden whitespace-nowrap relative select-none">
+        <div className="flex items-center space-x-2 flex-shrink-0 z-10 bg-slate-900 pr-3">
           <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse inline-block" />
           <span className="text-red-400 font-extrabold uppercase tracking-wide">{t("matchday_ticker", language)}</span>
         </div>
-        <div className="flex space-x-8 animate-[marquee_25s_linear_infinite] hover:[animation-play-state:paused]">
-          <span>{t("ticker_text_1", language)}</span>
-          <span>{t("ticker_text_2", language)}</span>
-          <span>{t("ticker_text_3", language)}</span>
-          <span>{t("ticker_text_4", language)}</span>
+        <div className="flex-1 overflow-hidden mx-4 relative">
+          <div className="flex space-x-8 animate-[marquee_30s_linear_infinite] hover:[animation-play-state:paused] whitespace-nowrap min-w-full">
+            <span>{t("ticker_text_1", language)}</span>
+            <span>{t("ticker_text_2", language)}</span>
+            <span>{t("ticker_text_3", language)}</span>
+            <span>{t("ticker_text_4", language)}</span>
+          </div>
         </div>
-        <span className="hidden sm:inline-block text-emerald-400">● {t("live_feed", language)}</span>
+        <span className="hidden sm:inline-block text-emerald-400 flex-shrink-0 z-10 bg-slate-900 pl-3">● {t("live_feed", language)}</span>
       </div>
 
       {/* Navigation Header */}
