@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { AlertOctagon, Activity, FileText, Megaphone, CheckCircle2, ShieldAlert, Sparkles } from "lucide-react";
 import { Incident, LanguageCode } from "../types";
+import { t } from "../lib/translations";
 
 interface StaffConsoleProps {
   language: LanguageCode;
@@ -148,6 +149,14 @@ export default function StaffConsole({
     }
   };
 
+  const getSeverityTranslation = (sev: "low" | "medium" | "high") => {
+    switch (sev) {
+      case "low": return t("severity_low", language);
+      case "medium": return t("severity_medium", language);
+      case "high": return t("severity_high", language);
+    }
+  };
+
   return (
     <div id="staff-console-root" className="grid grid-cols-1 xl:grid-cols-12 gap-5 h-full">
       
@@ -159,7 +168,7 @@ export default function StaffConsole({
           <div className="flex items-center justify-between">
             <h3 className="font-display font-black text-xs sm:text-sm text-slate-800 uppercase tracking-wider flex items-center space-x-1.5">
               <Activity className="w-4 h-4 text-emerald-600" />
-              <span>Operations Dispatch Desk</span>
+              <span>{t("incident_command_desk", language)}</span>
             </h3>
             <span className="text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 px-2 py-0.5 rounded-md">
               COMMAND MODE
@@ -168,13 +177,13 @@ export default function StaffConsole({
 
           <div className="grid grid-cols-3 gap-2 mt-3.5">
             <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-center">
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Unresolved</p>
+              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{t("status_active", language)}</p>
               <p className="text-xl font-black text-rose-600 mt-1">
                 {incidents.filter(i => i.status === "active").length}
               </p>
             </div>
             <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-center">
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Resolved Today</p>
+              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{t("status_resolved", language)}</p>
               <p className="text-xl font-black text-emerald-600 mt-1">
                 {incidents.filter(i => i.status === "resolved").length}
               </p>
@@ -190,7 +199,7 @@ export default function StaffConsole({
 
         {/* Live Active Incident list */}
         <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex-1">
-          <h3 className="text-xs font-black text-slate-400 uppercase tracking-wider mb-3">Incident Logs</h3>
+          <h3 className="text-xs font-black text-slate-400 uppercase tracking-wider mb-3">{t("active_incidents_header", language)}</h3>
           
           <div className="space-y-2.5 overflow-y-auto max-h-[220px]">
             {incidents.map((inc) => (
@@ -209,7 +218,7 @@ export default function StaffConsole({
                     <h4 className="font-bold text-xs sm:text-sm text-slate-800">{inc.title}</h4>
                   </div>
                   <span className={`text-[9px] font-bold border rounded px-1.5 py-0.5 ${getSeverityBadge(inc.severity)}`}>
-                    {inc.severity}
+                    {getSeverityTranslation(inc.severity)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-[10px] text-slate-400 mt-2">
@@ -218,7 +227,7 @@ export default function StaffConsole({
                     inc.status === "active" ? "text-amber-600" : "text-emerald-600"
                   }`}>
                     <span className={`w-1.5 h-1.5 rounded-full ${inc.status === "active" ? "bg-amber-600 animate-pulse" : "bg-emerald-600"}`} />
-                    <span className="uppercase">{inc.status}</span>
+                    <span className="uppercase">{inc.status === "active" ? t("status_active", language) : t("status_resolved", language)}</span>
                   </span>
                 </div>
               </div>
@@ -228,12 +237,12 @@ export default function StaffConsole({
 
         {/* Dispatch New Incident Form */}
         <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
-          <h3 className="text-xs font-black text-slate-400 uppercase tracking-wider mb-3">Report New Incident</h3>
+          <h3 className="text-xs font-black text-slate-400 uppercase tracking-wider mb-3">{t("steward_incident_report", language)}</h3>
           
           <form onSubmit={handleCreateIncident} className="space-y-3">
             <div className="grid grid-cols-2 gap-2.5">
               <div>
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide block mb-1">Title</label>
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide block mb-1">{t("incident_title_label", language)}</label>
                 <input
                   type="text"
                   required
@@ -244,7 +253,7 @@ export default function StaffConsole({
                 />
               </div>
               <div>
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide block mb-1">Location</label>
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide block mb-1">{t("location_label", language)}</label>
                 <input
                   type="text"
                   required
@@ -258,35 +267,35 @@ export default function StaffConsole({
 
             <div className="grid grid-cols-2 gap-2.5">
               <div>
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide block mb-1">Severity</label>
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide block mb-1">{t("severity_label", language)}</label>
                 <select
                   value={formSeverity}
                   onChange={(e) => setFormSeverity(e.target.value as any)}
                   className="w-full text-xs border border-slate-200 rounded-lg p-2 bg-white"
                 >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High Emergency</option>
+                  <option value="low">{t("severity_low", language)}</option>
+                  <option value="medium">{t("severity_medium", language)}</option>
+                  <option value="high">{t("severity_high", language)}</option>
                 </select>
               </div>
               <div>
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide block mb-1">Category</label>
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide block mb-1">{t("category_label", language)}</label>
                 <select
                   value={formCategory}
                   onChange={(e) => setFormCategory(e.target.value as any)}
                   className="w-full text-xs border border-slate-200 rounded-lg p-2 bg-white"
                 >
-                  <option value="crowd">👥 Crowd Flow</option>
-                  <option value="security">🛡️ Security Alert</option>
-                  <option value="medical">🚑 First Aid / Med</option>
-                  <option value="transit">🚌 Transportation</option>
-                  <option value="facilities">🔧 Facility Repairs</option>
+                  <option value="crowd">👥 {t("cat_crowd", language)}</option>
+                  <option value="security">🛡️ {t("cat_security", language)}</option>
+                  <option value="medical">🚑 {t("cat_medical", language)}</option>
+                  <option value="transit">🚌 {t("cat_transit", language)}</option>
+                  <option value="facilities">🔧 {t("cat_facilities", language)}</option>
                 </select>
               </div>
             </div>
 
             <div>
-              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide block mb-1">Incident Details</label>
+              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide block mb-1">{t("description_label", language)}</label>
               <textarea
                 required
                 rows={2}
@@ -301,7 +310,7 @@ export default function StaffConsole({
               type="submit"
               className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-2.5 rounded-xl transition-all shadow-xs cursor-pointer"
             >
-              Dispatch Incident Stewards
+              {t("dispatch_btn", language)}
             </button>
           </form>
         </div>
@@ -332,18 +341,18 @@ export default function StaffConsole({
                       className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center space-x-1 cursor-pointer transition-colors"
                     >
                       <CheckCircle2 className="w-4 h-4" />
-                      <span>Resolve</span>
+                      <span>{t("status_resolved", language)}</span>
                     </button>
                   )}
                   <span className={`text-xs font-black uppercase px-2.5 py-1 rounded-lg border flex items-center ${getSeverityBadge(selectedIncident.severity)}`}>
-                    {selectedIncident.severity}
+                    {getSeverityTranslation(selectedIncident.severity)}
                   </span>
                 </div>
               </div>
 
               {/* Description Body */}
               <div className="mt-3.5 bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-xs sm:text-sm text-slate-600 leading-relaxed">
-                <p className="font-bold text-slate-700 mb-1">Ground Dispatch Assessment:</p>
+                <p className="font-bold text-slate-700 mb-1">{t("description_label", language)}:</p>
                 {selectedIncident.description}
               </div>
             </div>
@@ -354,7 +363,7 @@ export default function StaffConsole({
               {isLoadingPlan ? (
                 <div className="absolute inset-0 bg-white/70 flex flex-col items-center justify-center space-y-3 z-10">
                   <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
-                  <p className="text-xs font-bold text-emerald-800 animate-pulse">Gemini-3.5-flash synthesizing resolution plan...</p>
+                  <p className="text-xs font-bold text-emerald-800 animate-pulse">Synthesizing resolution plan...</p>
                 </div>
               ) : selectedIncident.responsePlan ? (
                 <div className="space-y-4">
@@ -362,7 +371,7 @@ export default function StaffConsole({
                   <div className="bg-white p-3.5 rounded-xl border border-slate-100 shadow-xs">
                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider mb-2 flex items-center space-x-1">
                       <FileText className="w-4 h-4 text-emerald-600" />
-                      <span>Operational Action Plan</span>
+                      <span>{t("response_action_plan", language)}</span>
                     </h4>
                     
                     {/* Render action plan lines */}
@@ -378,7 +387,7 @@ export default function StaffConsole({
                     <div className="bg-amber-50/60 border border-amber-200/85 p-3.5 rounded-xl shadow-xs">
                       <h4 className="text-xs font-black text-amber-800 uppercase tracking-wider mb-2 flex items-center space-x-1">
                         <Megaphone className="w-4 h-4" />
-                        <span>Fan Announcement Script (PA)</span>
+                        <span>{t("pa_broadcast_script", language)}</span>
                       </h4>
                       <p className="font-serif italic text-xs sm:text-sm text-amber-900 leading-relaxed">
                         &ldquo;{selectedIncident.announcementScript}&rdquo;
@@ -390,14 +399,14 @@ export default function StaffConsole({
                   {selectedIncident.affectedSections && selectedIncident.affectedSections.length > 0 && (
                     <div className="flex items-center space-x-2 text-xs bg-rose-50 border border-rose-100 p-2.5 rounded-xl text-rose-800">
                       <ShieldAlert className="w-4 h-4 text-rose-600" />
-                      <span><strong>Alerted Sectors:</strong> {selectedIncident.affectedSections.join(", ")}</span>
+                      <span><strong>{t("affected_sectors", language)}</strong> {selectedIncident.affectedSections.join(", ")}</span>
                     </div>
                   )}
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center text-center h-full text-slate-400 p-4">
                   <Sparkles className="w-8 h-8 text-slate-300 mb-2" />
-                  <p className="text-xs font-bold uppercase tracking-wider">Awaiting Dispatch Instruction</p>
+                  <p className="text-xs font-bold uppercase tracking-wider">{t("waiting", language)}</p>
                   <p className="text-[11px] max-w-[280px] mt-1 text-slate-400">
                     Click "Generate AI Resolution Plan" below to query Gemini for emergency protocols and PA scripts.
                   </p>
@@ -413,7 +422,7 @@ export default function StaffConsole({
                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm py-3.5 rounded-xl transition-all shadow-xs flex items-center justify-center space-x-2 cursor-pointer"
               >
                 <Sparkles className="w-4 h-4 text-emerald-300 animate-pulse" />
-                <span>Generate GenAI Resolution Plan & PA Script</span>
+                <span>{t("response_action_plan", language)} & PA Script</span>
               </button>
             )}
 

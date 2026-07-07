@@ -44,6 +44,52 @@ app.get("/api/health", (req, res) => {
   });
 });
 
+// 1.5. Dynamic Translation API (Gemini/Google Translation Proxy)
+app.post("/api/translate", async (req, res) => {
+  try {
+    const { text, targetLanguage } = req.body;
+    if (!text) {
+      res.status(400).json({ error: "Text is required for translation." });
+      return;
+    }
+
+    let ai;
+    try {
+      ai = getGeminiClient();
+    } catch (err: any) {
+      console.warn("Gemini Client initialization failed for translation:", err.message);
+      res.json({
+        translatedText: `[DEMO TRANSLATION to ${targetLanguage || 'en'}]: ${text}`,
+        demoMode: true
+      });
+      return;
+    }
+
+    const prompt = `
+      You are a professional translator. Translate the following text into the target language "${targetLanguage || 'English'}".
+      Return ONLY the direct translation without any explanation, intro, quotes, or markdown wrappers. Keep any formatting intact:
+      "${text}"
+    `;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3.5-flash",
+      contents: prompt,
+      config: {
+        temperature: 0.1,
+      }
+    });
+
+    const translated = response.text?.trim() || text;
+    res.json({
+      translatedText: translated,
+      demoMode: false
+    });
+  } catch (error: any) {
+    console.error("Error in /api/translate:", error);
+    res.status(500).json({ error: error.message || "An error occurred during translation." });
+  }
+});
+
 // Mock knowledge base for grounding stadium operations and fan assistance
 const STADIUM_KNOWLEDGE_BASE = `
 FIFA World Cup 2026 Stadium Standards & Operations Manual:

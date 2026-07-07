@@ -6,6 +6,7 @@ import FanHub from "./components/FanHub";
 import StaffConsole from "./components/StaffConsole";
 import DiagnosticConsole from "./components/DiagnosticConsole";
 import { Terminal, Shield, Sparkles, MapPin, Radio, Heart } from "lucide-react";
+import { t } from "./lib/translations";
 
 // Predefined Facility Datasets for each Stadium
 const STADIUM_FACILITIES: Record<string, Facility[]> = {
@@ -80,15 +81,15 @@ export default function App() {
       <div className="bg-slate-900 text-white py-1 px-4 text-[10px] sm:text-xs font-mono font-bold flex items-center justify-between overflow-hidden whitespace-nowrap">
         <div className="flex items-center space-x-2">
           <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse inline-block" />
-          <span className="text-red-400 font-extrabold uppercase tracking-wide">MATCHDAY TICKER:</span>
+          <span className="text-red-400 font-extrabold uppercase tracking-wide">{t("matchday_ticker", language)}</span>
         </div>
         <div className="flex space-x-8 animate-[marquee_25s_linear_infinite] hover:[animation-play-state:paused]">
-          <span>🇺🇸 USA 2 - 1 MEX 🇲🇽 (FT) • MetLife Arena Ops Status: Optimal</span>
-          <span>🇨🇦 CAN vs GER 🇩🇪 (Tonight 20:00 EST) • Lot K Transit Active</span>
-          <span>🇧🇷 BRA vs ESP 🇪🇸 (Tomorrow 18:00 PST) • SoFi Shuttle Slots 94% Booked</span>
-          <span>♿ ADA Escorts Available at All Information Booths • Ask AI Assistant for help</span>
+          <span>{t("ticker_text_1", language)}</span>
+          <span>{t("ticker_text_2", language)}</span>
+          <span>{t("ticker_text_3", language)}</span>
+          <span>{t("ticker_text_4", language)}</span>
         </div>
-        <span className="hidden sm:inline-block text-emerald-400">● Live Feed</span>
+        <span className="hidden sm:inline-block text-emerald-400">● {t("live_feed", language)}</span>
       </div>
 
       {/* Navigation Header */}
@@ -122,7 +123,7 @@ export default function App() {
               }`}
             >
               <span>🏟️</span>
-              <span>Tournament Center</span>
+              <span>{t("tournament_center", language)}</span>
             </button>
             <button
               id="diagnostic-tab-btn"
@@ -134,13 +135,13 @@ export default function App() {
               }`}
             >
               <Terminal className="w-3.5 h-3.5" />
-              <span>Diagnostic Console</span>
+              <span>{t("diagnostic_console_tab", language)}</span>
             </button>
           </div>
 
           <div className="hidden md:flex items-center space-x-2 text-xs font-semibold text-slate-400">
             <MapPin className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Sector Grid Coordinates active</span>
+            <span>{t("grid_coords_active", language)}</span>
           </div>
         </div>
 
@@ -158,6 +159,7 @@ export default function App() {
                   selectedFacility={selectedFacility}
                   accessibleOnly={accessibleOnly}
                   highContrast={highContrast}
+                  language={language}
                 />
               </div>
 
@@ -168,8 +170,8 @@ export default function App() {
                     <div className="flex items-center space-x-2 border-b pb-3.5 mb-4">
                       <Sparkles className="w-5 h-5 text-emerald-600" />
                       <div>
-                        <h3 className="font-display font-extrabold text-base text-slate-800">World Cup Fan Assistance</h3>
-                        <p className="text-[11px] text-slate-400">Simulate fan interface, transport guides & sustainability</p>
+                        <h3 className="font-display font-extrabold text-base text-slate-800">{t("fan_assistance_title", language)}</h3>
+                        <p className="text-[11px] text-slate-400">{t("fan_assistance_subtitle", language)}</p>
                       </div>
                     </div>
                     <FanHub
@@ -185,8 +187,8 @@ export default function App() {
                     <div className="flex items-center space-x-2 border-b pb-3.5 mb-4">
                       <Shield className="w-5 h-5 text-emerald-600" />
                       <div>
-                        <h3 className="font-display font-extrabold text-base text-slate-800">Incident Command Desk</h3>
-                        <p className="text-[11px] text-slate-400">Simulate venue dispatcher & volunteer action protocols</p>
+                        <h3 className="font-display font-extrabold text-base text-slate-800">{t("incident_command_desk", language)}</h3>
+                        <p className="text-[11px] text-slate-400">{t("incident_subtitle", language)}</p>
                       </div>
                     </div>
                     <StaffConsole
@@ -214,10 +216,10 @@ export default function App() {
       }`}>
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
           <p className="flex items-center justify-center space-x-1">
-            <span>⚽ Official Tournament Stadium System • FIFA World Cup 2026</span>
+            <span>⚽ {t("official_stadium_system", language)}</span>
           </p>
           <p className="flex items-center space-x-1">
-            <span>Powered by</span>
+            <span>{t("powered_by", language)}</span>
             <span className="font-extrabold text-emerald-600">Gemini-3.5-flash</span>
           </p>
         </div>

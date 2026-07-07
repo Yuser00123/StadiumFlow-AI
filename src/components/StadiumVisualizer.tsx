@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { MapPin, Users, Clock, Flame, Shield, HelpCircle } from "lucide-react";
-import { Facility } from "../types";
+import { Facility, LanguageCode } from "../types";
+import { t } from "../lib/translations";
 
 interface StadiumVisualizerProps {
   activeStadium: string;
@@ -9,6 +10,7 @@ interface StadiumVisualizerProps {
   selectedFacility: Facility | null;
   accessibleOnly: boolean;
   highContrast: boolean;
+  language: LanguageCode;
 }
 
 export default function StadiumVisualizer({
@@ -17,7 +19,8 @@ export default function StadiumVisualizer({
   onSelectFacility,
   selectedFacility,
   accessibleOnly,
-  highContrast
+  highContrast,
+  language
 }: StadiumVisualizerProps) {
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
 
@@ -64,13 +67,13 @@ export default function StadiumVisualizer({
       <div className="flex justify-between items-start mb-4">
         <div>
           <h2 className="font-display font-extrabold text-base sm:text-lg flex items-center space-x-1.5">
-            <span>Stadium Interactive Visualizer</span>
+            <span>{t("visualizer_title", language)}</span>
             <span className="text-[10px] py-0.5 px-1.5 font-bold uppercase rounded-md bg-emerald-600 text-white tracking-widest animate-pulse">
-              LIVE TELEMETRY
+              {t("live_telemetry", language)}
             </span>
           </h2>
           <p className="text-xs text-slate-400">
-            {accessibleOnly ? "Showing wheelchair-friendly pathways and lifts" : "Click elements on the stadium grid to view detailed queues & routes"}
+            {accessibleOnly ? t("visualizer_subtitle", language) : t("select_pin_prompt", language)}
           </p>
         </div>
       </div>
@@ -84,7 +87,7 @@ export default function StadiumVisualizer({
           {/* Wheelchair legend indicator */}
           {accessibleOnly && (
             <div className="absolute top-2 left-2 bg-emerald-600 text-white text-[10px] font-bold px-2 py-1 rounded-lg flex items-center space-x-1 shadow-sm z-10">
-              <span>♿</span> <span>ACCESSIBLE PATHS HIGHLIGHTED</span>
+              <span>♿</span> <span>{t("accessible_paths_highlighted", language)}</span>
             </div>
           )}
 
@@ -275,14 +278,14 @@ export default function StadiumVisualizer({
           
           {/* Legend Selector */}
           <div className="bg-slate-50/65 dark:bg-zinc-900 p-2.5 rounded-xl border border-slate-100">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Facility Legend</h3>
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">{t("facility_legend", language)}</h3>
             <div className="grid grid-cols-2 gap-2 text-[11px] font-medium text-slate-600 dark:text-slate-300">
-              <span className="flex items-center space-x-1"><span>🚪</span> <span>Gates / Entries</span></span>
-              <span className="flex items-center space-x-1"><span>🌭</span> <span>Food / Concessions</span></span>
-              <span className="flex items-center space-x-1"><span>🚻</span> <span>Restrooms (ADA)</span></span>
-              <span className="flex items-center space-x-1"><span>🚑</span> <span>Medical Care</span></span>
-              <span className="flex items-center space-x-1"><span>🚌</span> <span>Transit / Shuttles</span></span>
-              <span className="flex items-center space-x-1"><span>♿</span> <span>Accessible Lift</span></span>
+              <span className="flex items-center space-x-1"><span>🚪</span> <span>{t("legend_gates", language)}</span></span>
+              <span className="flex items-center space-x-1"><span>🌭</span> <span>{t("legend_food", language)}</span></span>
+              <span className="flex items-center space-x-1"><span>🚻</span> <span>{t("legend_restrooms", language)}</span></span>
+              <span className="flex items-center space-x-1"><span>🚑</span> <span>{t("legend_medical", language)}</span></span>
+              <span className="flex items-center space-x-1"><span>🚌</span> <span>{t("legend_transit", language)}</span></span>
+              <span className="flex items-center space-x-1"><span>♿</span> <span>{t("legend_lift", language)}</span></span>
             </div>
           </div>
 
@@ -316,7 +319,7 @@ export default function StadiumVisualizer({
                 <div className="bg-white/80 p-2 rounded-lg border border-slate-100">
                   <div className="flex items-center space-x-1 text-slate-500">
                     <Users className="w-3.5 h-3.5" />
-                    <span className="text-[10px] font-bold uppercase tracking-wider">Crowd Density</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider">{t("crowd_density", language)}</span>
                   </div>
                   <span className={`text-xs font-bold px-2 py-0.5 rounded-md inline-block mt-1 ${getCrowdBadgeColor(selectedFacility.crowdLevel)}`}>
                     {selectedFacility.crowdLevel}
@@ -326,10 +329,10 @@ export default function StadiumVisualizer({
                 <div className="bg-white/80 p-2 rounded-lg border border-slate-100">
                   <div className="flex items-center space-x-1 text-slate-500">
                     <Clock className="w-3.5 h-3.5" />
-                    <span className="text-[10px] font-bold uppercase tracking-wider">Wait Time</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider">{t("wait_time", language)}</span>
                   </div>
                   <span className="text-xs sm:text-sm font-black text-slate-700 block mt-1">
-                    {selectedFacility.waitTimeMinutes} mins
+                    {selectedFacility.waitTimeMinutes} {t("minutes_abbr", language)}
                   </span>
                 </div>
               </div>
@@ -338,7 +341,7 @@ export default function StadiumVisualizer({
               <div className="mt-3 bg-white/90 p-2.5 rounded-lg text-xs border border-slate-100 flex items-start space-x-2">
                 <span className="text-sm">💡</span>
                 <div>
-                  <p className="font-bold text-slate-700">ArenaOps Routing Advise</p>
+                  <p className="font-bold text-slate-700">{t("arena_ops_routing_advise", language)}</p>
                   <p className="text-slate-500 text-[11px] leading-relaxed mt-0.5">
                     {selectedFacility.status === "congested" 
                       ? "This zone is currently crowded. Consider using identical facilities in neighboring Tier sectors." 
@@ -352,26 +355,26 @@ export default function StadiumVisualizer({
               <span className="text-2xl mb-1 text-slate-300">🗺️</span>
               <p className="text-xs font-bold text-slate-400 uppercase tracking-wide">Telemetry Station</p>
               <p className="text-[11px] text-slate-400 mt-1 max-w-[200px]">
-                Click any marker on the map to access queue levels and path suggestions.
+                {t("select_pin_prompt", language)}
               </p>
             </div>
           )}
 
           {/* Core Telemetry Health Metrics (Operations Summary) */}
           <div className="bg-slate-50/60 dark:bg-zinc-900 p-3 rounded-xl border border-slate-200/50">
-            <h3 className="text-[10px] font-black text-slate-400 tracking-wider uppercase mb-2">STADIUM METRICS</h3>
+            <h3 className="text-[10px] font-black text-slate-400 tracking-wider uppercase mb-2">{t("stadium_metrics", language)}</h3>
             <div className="space-y-1.5 text-xs">
               <div className="flex justify-between items-center">
-                <span className="text-slate-400">Stadium Capacity Flow:</span>
+                <span className="text-slate-400">{t("stadium_capacity_flow", language)}</span>
                 <span className="font-mono font-bold text-slate-600">89% Filled</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-400">Ticketing Gates:</span>
-                <span className="font-mono font-bold text-emerald-600">Gate A & C Normal</span>
+                <span className="text-slate-400">{t("ticketing_gates", language)}</span>
+                <span className="font-mono font-bold text-emerald-600">{t("gate_a_c_normal", language)}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-400">Total Active Staff/Vols:</span>
-                <span className="font-mono font-bold text-slate-600">412 Dispatched</span>
+                <span className="text-slate-400">{t("total_active_staff", language)}</span>
+                <span className="font-mono font-bold text-slate-600">412 {t("dispatched", language)}</span>
               </div>
             </div>
           </div>

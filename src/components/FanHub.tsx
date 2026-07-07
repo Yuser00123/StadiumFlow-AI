@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Send, Sparkles, Compass, Bus, HelpCircle, Heart, Trash2, ArrowRight } from "lucide-react";
 import { LanguageCode, Message, Facility } from "../types";
+import { t } from "../lib/translations";
 
 interface FanHubProps {
   language: LanguageCode;
@@ -67,18 +68,35 @@ export default function FanHub({
   textSize,
   highContrast
 }: FanHubProps) {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "welcome-msg",
-      role: "model",
-      text: "👋 Welcome to the FIFA World Cup 2026 Arena Guide! I am your AI Tournament Assistant. Ask me anything about stadium gates, concessions, transportation hubs, wheelchair routes, or sustainable cup returns!",
-      timestamp: new Date().toLocaleTimeString(),
-      category: "general"
-    }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Sync welcome message on language change
+  useEffect(() => {
+    setMessages(prev => {
+      const hasWelcome = prev.some(m => m.id === "welcome-msg");
+      if (!hasWelcome) {
+        return [
+          {
+            id: "welcome-msg",
+            role: "model",
+            text: t("welcome_msg", language),
+            timestamp: new Date().toLocaleTimeString(),
+            category: "general"
+          },
+          ...prev
+        ];
+      }
+      return prev.map(m => {
+        if (m.id === "welcome-msg") {
+          return { ...m, text: t("welcome_msg", language) };
+        }
+        return m;
+      });
+    });
+  }, [language]);
 
   // Suggested Prompts based on Language
   const SUGGESTED_PROMPTS: Record<LanguageCode, string[]> = {
@@ -200,12 +218,12 @@ export default function FanHub({
               <Sparkles className="w-5 h-5 text-emerald-300" />
             </div>
             <div>
-              <h3 className="font-display font-bold text-sm sm:text-base">AI Fan Ambassador</h3>
-              <p className="text-[10px] text-emerald-200/90 font-medium">World Cup 2026 Multilingual Support Center</p>
+              <h3 className="font-display font-bold text-sm sm:text-base">{t("ai_fan_ambassador", language)}</h3>
+              <p className="text-[10px] text-emerald-200/90 font-medium">{t("multilingual_support", language)}</p>
             </div>
           </div>
           <span className="text-xs bg-emerald-900/50 px-2.5 py-1 rounded-md border border-emerald-600/30 font-mono font-bold uppercase tracking-wider">
-            {language} ACTIVE
+            {language.toUpperCase()} {t("status_active", language)}
           </span>
         </div>
 
@@ -275,7 +293,7 @@ export default function FanHub({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSendMessage(inputValue)}
-            placeholder="Type your question (e.g. 'How to return reusable cup?')..."
+            placeholder={t("ask_placeholder", language)}
             className="flex-1 text-xs border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
           />
           <button
@@ -296,9 +314,9 @@ export default function FanHub({
         <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
           <h3 className="font-display font-bold text-xs sm:text-sm text-slate-800 flex items-center space-x-1.5">
             <Bus className="w-4 h-4 text-emerald-600" />
-            <span>Transit & Shuttle Planner</span>
+            <span>{t("transit_planner", language)}</span>
           </h3>
-          <p className="text-[11px] text-slate-400 mt-0.5">Continuous match-day routes & countdowns</p>
+          <p className="text-[11px] text-slate-400 mt-0.5">{t("transit_subtitle", language)}</p>
           
           <div className="mt-3.5 space-y-3">
             <div className="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
@@ -327,7 +345,7 @@ export default function FanHub({
                 <p className="text-[10px] text-slate-400">Zone Blue • Stewards active</p>
               </div>
               <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded uppercase">
-                Active
+                {t("status_active", language)}
               </span>
             </div>
           </div>
@@ -337,32 +355,32 @@ export default function FanHub({
         <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex-1">
           <h3 className="font-display font-bold text-xs sm:text-sm text-slate-800 flex items-center space-x-1.5">
             <Compass className="w-4 h-4 text-emerald-600" />
-            <span>Sustainability Corner</span>
+            <span>{t("sustainability_corner", language)}</span>
           </h3>
-          <p className="text-[11px] text-slate-400 mt-0.5">Help us achieve zero waste during World Cup 2026</p>
+          <p className="text-[11px] text-slate-400 mt-0.5">{t("sustainability_subtitle", language)}</p>
 
           <div className="mt-3.5 space-y-3 text-xs">
             {/* Color Coded Bins */}
             <div className="p-2.5 rounded-xl bg-emerald-50/50 border border-emerald-100">
               <p className="font-bold text-emerald-800 flex items-center space-x-1">
-                <span>🟢</span> <span>Green Container: Organic waste only</span>
+                <span>🟢</span> <span>{t("green_container_title", language)}</span>
               </p>
-              <p className="text-[10px] text-emerald-700/80 mt-0.5">Deposit hotdog liners, plates, and bio-scraps.</p>
+              <p className="text-[10px] text-emerald-700/80 mt-0.5">{t("green_container_desc", language)}</p>
             </div>
 
             <div className="p-2.5 rounded-xl bg-blue-50/50 border border-blue-100">
               <p className="font-bold text-blue-800 flex items-center space-x-1">
-                <span>🔵</span> <span>Blue Container: Recyclables</span>
+                <span>🔵</span> <span>{t("blue_container_title", language)}</span>
               </p>
-              <p className="text-[10px] text-blue-700/80 mt-0.5">Dry paper bags, aluminum cans, cardboard boxes.</p>
+              <p className="text-[10px] text-blue-700/80 mt-0.5">{t("blue_container_desc", language)}</p>
             </div>
 
             {/* Reusable cup return */}
             <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100 flex items-start space-x-2">
               <span className="text-base">♻️</span>
               <div>
-                <p className="font-bold text-slate-700">Cup Reusability Program</p>
-                <p className="text-[10px] text-slate-400 mt-0.5">Return your collector cup to any kiosk for a $2 deposit return or donation!</p>
+                <p className="font-bold text-slate-700">{t("cup_reusability_title", language)}</p>
+                <p className="text-[10px] text-slate-400 mt-0.5">{t("cup_reusability_desc", language)}</p>
               </div>
             </div>
           </div>
@@ -370,8 +388,8 @@ export default function FanHub({
 
         {/* Under-utilized Concessions suggestions */}
         <div className="bg-emerald-800 text-white p-4 rounded-2xl shadow-xs">
-          <h4 className="text-xs font-black uppercase tracking-wider text-emerald-300">Concession Optimizer</h4>
-          <p className="text-[10px] text-emerald-100/90 mt-0.5">Avoid lines! AI suggests under-utilized vendors:</p>
+          <h4 className="text-xs font-black uppercase tracking-wider text-emerald-300">{t("concession_optimizer", language)}</h4>
+          <p className="text-[10px] text-emerald-100/90 mt-0.5">{t("concession_subtitle", language)}</p>
           
           <div className="mt-3 space-y-2">
             {foodConcessions.slice(0, 2).map((conc, idx) => (
@@ -382,7 +400,7 @@ export default function FanHub({
               >
                 <div>
                   <p className="text-xs font-bold">🍔 {conc.name}</p>
-                  <p className="text-[9px] text-emerald-200">Sector: {conc.section} • Wait: {conc.waitTimeMinutes}m</p>
+                  <p className="text-[9px] text-emerald-200">Sector: {conc.section} • Wait: {conc.waitTimeMinutes}{t("minutes_abbr", language)}</p>
                 </div>
                 <ArrowRight className="w-3.5 h-3.5" />
               </div>
